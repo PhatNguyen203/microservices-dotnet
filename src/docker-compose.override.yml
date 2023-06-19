@@ -52,3 +52,13 @@ services:
     ports:
       - "8001:80"
 
+
+  discount.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:PostgresConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=myPassword123456789;"
+    depends_on:
+      - discountdb 
+    ports:
+      - "8002:80"
+
