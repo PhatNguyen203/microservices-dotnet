@@ -60,19 +60,19 @@ services:
     container_name: discount.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:PostgresConnectionString=Server=DiscountServer;Port=5432;Database=DiscountDb;User Id=admin;Password=myPassword123456789;"
+      - "DatabaseSettings:PostgresConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=myPassword123456789;"
     depends_on:
       - discountdb 
     ports:
       - "8002:80"
 
-
   discount.grpc:
     container_name: discount.grpc
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:PostgresConnectionString=Server=DiscountServer;Port=5432;Database=DiscountDb;User Id=admin;Password=myPassword123456789;"
+      - "DatabaseSettings:PostgresConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=myPassword123456789;"
     depends_on:
       - discountdb
     ports:
       - "8003:80"
+

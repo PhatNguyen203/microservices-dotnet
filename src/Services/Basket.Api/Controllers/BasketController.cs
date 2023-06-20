@@ -2,6 +2,7 @@
 using Basket.Api.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,13 @@ namespace Basket.Api.Controllers
     {
         private readonly IBasketRepository basketRepository;
         private readonly DiscountClientService discountClientService;
+        private readonly ILogger<BasketController> logger;
 
-        public BasketController(IBasketRepository basketRepository, DiscountClientService discountClientService)
+        public BasketController(IBasketRepository basketRepository, DiscountClientService discountClientService, ILogger<BasketController> logger)
         {
             this.basketRepository = basketRepository;
             this.discountClientService = discountClientService;
+            this.logger = logger;
         }
 
         [HttpGet("username")]
@@ -34,8 +37,10 @@ namespace Basket.Api.Controllers
         public async Task<ActionResult<Entities.Basket>>UpdateBasket([FromBody] Entities.Basket basket)
         {
             //Comunicate with discount gprc to get the discount for items
+            
             foreach (var item in basket.Items)
             {
+                logger.LogInformation("Adding discount for {0}", item.BrandName);
                 var coupon = await discountClientService.GetDiscount(item.BrandName);
                 item.Price -= (decimal)coupon.Amount;
             }
