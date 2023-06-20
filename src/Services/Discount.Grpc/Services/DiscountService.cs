@@ -48,11 +48,11 @@ namespace Discount.Grpc.Services
                 return request.Coupon;
             return null;
         }
-        public override async Task<DeleteResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
+        public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
         {
             var result = await discountRepository.DeleteCoupon(request.ProductName);
            
-            return new DeleteResponse { IsSuccess = result };
+            return new DeleteDiscountResponse { Success = result };
         }
     }
 }

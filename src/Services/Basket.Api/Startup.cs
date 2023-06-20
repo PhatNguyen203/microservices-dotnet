@@ -1,5 +1,8 @@
+//using Basket.Api.GrpcServices;
+using Basket.Api.GrpcServices;
 using Basket.Api.Repositories;
 using Basket.Api.Repositories.Contracts;
+using Discount.Grpc.Protos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +30,18 @@ namespace Basket.Api
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddScoped<DiscountClientService>();
 			services.AddScoped<IBasketRepository, BasketRepository>();
 			services.AddStackExchangeRedisCache(options => 
 			{
 				options.Configuration = Configuration.GetValue<string>("CacheSettings:RedisConnectionString");
 			});
+            services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options =>
+            {
+                options.Address = new Uri(Configuration.GetValue<string>("GrpcSettings:DiscountUrl"));
+            });
 
-			services.AddControllers();
+            services.AddControllers();
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket.Api", Version = "v1" });
