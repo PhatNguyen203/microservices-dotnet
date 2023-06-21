@@ -20,7 +20,6 @@ namespace Ordering.Api.Controllers
         public OrderController(IMediator mediator)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            this.mediator = mediator;
         }
 
         [HttpGet("{userName}", Name = "GetOrder")]
