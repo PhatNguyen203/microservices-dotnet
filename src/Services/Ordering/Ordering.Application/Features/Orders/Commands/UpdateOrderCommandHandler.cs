@@ -2,6 +2,7 @@
 using MediatR;
 using Ordering.Application.Contracts.Infrastructure;
 using Ordering.Application.Contracts.Persistence;
+using Ordering.Application.Exceptions;
 using Ordering.Application.Models;
 using Ordering.Domain.Entities;
 using System;
@@ -28,8 +29,11 @@ namespace Ordering.Application.Features.Orders.Commands
         public async Task<Unit> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
         {
             var existingOrder = await orderRepository.GetByIdAsync(request.Id);
-
-            //mapping re
+            if (existingOrder == null)
+            {
+                throw new NotFoundException(nameof(Order), request.Id);
+            }
+            //mapping source value to destination
             mapper.Map(request, existingOrder, typeof(UpdateOrderCommand), typeof(Order));
 
             await orderRepository.UpdateAsync(existingOrder);

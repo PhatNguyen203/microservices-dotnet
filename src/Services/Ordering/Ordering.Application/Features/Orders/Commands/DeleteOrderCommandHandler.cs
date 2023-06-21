@@ -2,6 +2,7 @@
 using MediatR;
 using Ordering.Application.Contracts.Infrastructure;
 using Ordering.Application.Contracts.Persistence;
+using Ordering.Application.Exceptions;
 using Ordering.Application.Models;
 using Ordering.Domain.Entities;
 using System;
@@ -28,6 +29,10 @@ namespace Ordering.Application.Features.Orders.Commands
         public async Task<Unit> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
         {
             var existingOrder = await orderRepository.GetByIdAsync(request.Id);
+            if(existingOrder == null)
+            {
+                throw new NotFoundException(nameof(Order), request.Id);
+            }
             int orderId = existingOrder.Id;
             await orderRepository.DeleteAsync(existingOrder);
             await SendMail(orderId);
