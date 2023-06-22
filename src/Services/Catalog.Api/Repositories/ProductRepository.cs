@@ -34,11 +34,11 @@ namespace Catalog.Api.Repositories
 			return await context.Products.Find(filter).ToListAsync();
 		}
 
-		public async Task<IEnumerable<Product>> GetProductByName(string name)
+		public async Task<Product> GetProductByName(string name)
 		{
 			FilterDefinition<Product> filter = Builders<Product>.Filter.Eq(p => p.Name, name);
 
-			return await context.Products.Find(filter).ToListAsync();
+			return await context.Products.Find(filter).FirstOrDefaultAsync();
 		}
 
 		public async Task CreateProduct(Product product)

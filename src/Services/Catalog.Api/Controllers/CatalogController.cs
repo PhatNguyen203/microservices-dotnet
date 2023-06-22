@@ -54,15 +54,15 @@ namespace Catalog.Api.Controllers
 
 		[Route("[action]/{name}", Name = "GetProductByName")]
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Product>>> GetProductByName(string name)
+		public async Task<ActionResult<Product>> GetProductByName(string name)
 		{
-			var items = await repository.GetProductByName(name);
-			if (items == null)
+			var item = await repository.GetProductByName(name);
+			if (item == null)
 			{
 				logger.LogError($"Products with name: {name} not found.");
 				return NotFound();
 			}
-			return Ok(items);
+			return Ok(item);
 		}
 
 		[HttpPost]
